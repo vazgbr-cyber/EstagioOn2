@@ -1,0 +1,9 @@
+# Banco de dados local (evita expor e-mails cadastrados ou chaves de API)
+data/
+
+# Dependências e logs
+node_modules/
+*.log
+.env
+.DS_Store
+Thumbs.db

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EstágioOn // Engenharia Química — Uberlândia, MG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Grade arquitetônica / CAD Blueprint de fundo -->
+  <div class="blueprint-backdrop" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <!-- CABEÇALHO / CARIMBO TÉCNICO DE ENGENHARIA (TITLE BLOCK) -->
+    <header class="title-block">
+      <div class="brand-cell">
+        <div class="blueprint-emblem" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="1.75" />
+            <polygon points="24,11 35,17.5 35,30.5 24,37 13,30.5 13,17.5" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2" opacity="0.7" />
+            <circle cx="24" cy="24" r="5" stroke="#38BDF8" stroke-width="1.75" />
+            <line x1="24" y1="0" x2="24" y2="8" stroke="currentColor" stroke-width="1.2" opacity="0.6" />
+            <line x1="24" y1="40" x2="24" y2="48" stroke="currentColor" stroke-width="1.2" opacity="0.6" />
+          </svg>
+        </div>
+        <div>
+          <div class="doc-code">DOC // EQ-UDI-RADAR • TRIÂNGULO MINEIRO — 18°55'07"S 48°16'38"W</div>
+          <h1 class="brand-title">ESTÁGIO<span class="accent">.ON</span> <span class="brand-divider">/</span> Engenharia Química</h1>
+          <p class="brand-subtitle">Monitoramento técnico de estágios industriais, P&amp;D, qualidade e processos em <strong>Uberlândia — MG</strong></p>
+        </div>
+      </div>
+
+      <div class="stamp-meta-grid">
+        <div class="stamp-cell">
+          <span class="stamp-label">ESCOPO GEOGRÁFICO</span>
+          <span class="stamp-value">Uberlândia, MG (100%)</span>
+        </div>
+        <div class="stamp-cell">
+          <span class="stamp-label">STATUS DO RADAR</span>
+          <span class="stamp-value status-live" id="radarStatusLabel">
+            <span class="pulse-dot"></span> Verificando...
+          </span>
+        </div>
+        <div class="stamp-cell">
+          <span class="stamp-label">ÚLTIMA VERIFICAÇÃO</span>
+          <span class="stamp-value mono" id="lastScanTime">--:--:--</span>
+        </div>
+        <div class="stamp-actions">
+          <button type="button" class="btn btn-secondary" id="btnScanNow" title="Executar nova varredura nos portais agora">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+              <path d="M16 16h5v5" />
+            </svg>
+            <span>Verificar Agora</span>
+          </button>
+
+          <button type="button" class="btn btn-ghost-accent" id="btnSimulateNew" title="Simular chegada de uma nova vaga em Uberlândia para testar a tag Novidade! e o disparo de e-mail">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span>Simular Nova Vaga</span>
+          </button>
+
+          <button type="button" class="btn btn-primary" id="btnOpenEmailModal">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            </svg>
+            <span>Alertas por E-mail</span>
+            <span class="btn-counter" id="subscriberBadgeCount">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- BARRA DE TELEMETRIA DE VERIFICAÇÃO AUTOMÁTICA AO ABRIR O SITE -->
+    <section class="scan-telemetry" id="scanTelemetryBar" aria-live="polite">
+      <div class="scan-telemetry-header">
+        <div class="scan-step-text" id="scanStepText">
+          <span class="mono-tag">[SCAN INIT]</span> Inicializando varredura automática de vagas em Uberlândia-MG...
+        </div>
+        <div class="scan-sources mono" id="scanSourcesSummary">
+          FONTES: DISTRITO INDUSTRIAL • GUPY API • PORTAIS CORPORATIVOS
+        </div>
+      </div>
+      <div class="scan-progress-track">
+        <div class="scan-progress-bar" id="scanProgressBar"></div>
+      </div>
+    </section>
+
+    <!-- FAIXA DE INDICADORES TÉCNICOS (KPIs) -->
+    <section class="kpi-grid" aria-label="Resumo estatístico das vagas">
+      <div class="kpi-card">
+        <span class="corner-mark tl">+</span><span class="corner-mark tr">+</span>
+        <div class="kpi-label">01 // VAGAS ATIVAS EM UBERLÂNDIA</div>
+        <div class="kpi-value" id="kpiTotalJobs">--</div>
+        <div class="kpi-foot" id="kpiSectorCount">Polo Industrial &amp; Laboratórios</div>
+      </div>
+
+      <div class="kpi-card kpi-highlight">
+        <span class="corner-mark tl">+</span><span class="corner-mark tr">+</span>
+        <div class="kpi-label">02 // NÃO LIDAS ("NOVIDADE!")</div>
+        <div class="kpi-value accent-amber" id="kpiNewJobs">--</div>
+        <div class="kpi-foot">Clique em uma vaga para expandir e marcar como lida</div>
+      </div>
+
+      <div class="kpi-card">
+        <span class="corner-mark tl">+</span><span class="corner-mark tr">+</span>
+        <div class="kpi-label">03 // MÉDIA DE BOLSA-AUXÍLIO</div>
+        <div class="kpi-value accent-emerald" id="kpiAvgSalary">R$ --</div>
+        <div class="kpi-foot" id="kpiMaxSalary">Teto atual: R$ --</div>
+      </div>
+
+      <div class="kpi-card kpi-clickable" id="kpiEmailCard" role="button" tabindex="0" title="Abrir configuração de notificações por e-mail">
+        <span class="corner-mark tl">+</span><span class="corner-mark tr">+</span>
+        <div class="kpi-label">04 // NOTIFICAÇÕES POR E-MAIL</div>
+        <div class="kpi-value accent-cyan" id="kpiEmailStatus">Inativo</div>
+        <div class="kpi-foot" id="kpiEmailFoot">Clique para cadastrar seu e-mail →</div>
+      </div>
+    </section>
+
+    <!-- CONTROLES DE FILTRO E PESQUISA -->
+    <section class="filter-panel" aria-label="Filtros de busca">
+      <div class="filter-top-row">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Filtrar por empresa, operação unitária, requisito (ex: Cargill, HPLC, Processos, ETE)..."
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="select-group">
+          <label for="sectorSelect" class="sr-only">Ramo Industrial</label>
+          <select id="sectorSelect">
+            <option value="ALL">Ramo: Todos os Setores</option>
+            <option value="Química & Saneantes">Química &amp; Saneantes</option>
+            <option value="Agroquímica & Fertilizantes">Agroquímica &amp; Fertilizantes</option>
+            <option value="Grãos & Bioprocessos">Grãos &amp; Bioprocessos</option>
+            <option value="Alimentos & Bebidas">Alimentos &amp; Bebidas</option>
+            <option value="Meio Ambiente & Utilidades">Meio Ambiente &amp; Utilidades</option>
+          </select>
+
+          <label for="sortSelect" class="sr-only">Ordenar por</label>
+          <select id="sortSelect">
+            <option value="NEW_FIRST">Ordenar: Novidades Primeiro</option>
+            <option value="SALARY_DESC">Ordenar: Maior Bolsa-Auxílio</option>
+            <option value="DEADLINE_ASC">Ordenar: Prazo Mais Próximo</option>
+            <option value="RECENT_START">Ordenar: Abertura Mais Recente</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-pills-row">
+        <div class="Quick-pills" role="group" aria-label="Filtros rápidos">
+          <button type="button" class="filter-pill active" data-quick="ALL">Todas as Vagas</button>
+          <button type="button" class="filter-pill" data-quick="NEW_ONLY">
+            <span class="pill-dot"></span> Apenas "Novidade!"
+          </button>
+          <button type="button" class="filter-pill" data-quick="HIGH_SALARY">Bolsa ≥ R$ 2.000</button>
+          <button type="button" class="filter-pill" data-quick="CLOSING_SOON">Encerram em ≤ 15 dias</button>
+        </div>
+
+        <div class="results-counter mono" id="resultsCounter">
+          EXIBINDO 0 DE 0 VAGAS
+        </div>
+      </div>
+    </section>
+
+    <!-- LISTA DE VAGAS (CARDS EXPANSÍVEIS EM ESTILO FICHA TÉCNICA BLUEPRINT) -->
+    <main id="jobsContainer" class="jobs-list" aria-live="polite">
+      <!-- Renderizado dinamicamente via app.js -->
+    </main>
+
+    <!-- BANNER INFERIOR DE CADASTRO RÁPIDO DE ALERTA DE E-MAIL -->
+    <section class="blueprint-cta-banner">
+      <div class="cta-banner-info">
+        <div class="mono-tag">// SISTEMA AUTOMÁTICO DE ALERTA DE VAGAS</div>
+        <h2>Receba cada nova vaga de Engenharia Química em Uberlândia direto no seu e-mail</h2>
+        <p>Assim que o radar identificar abertura de estágio nos portais industriais, enviamos a ficha completa com salário, prazo e link direto.</p>
+      </div>
+      <form class="quick-email-form" id="inlineEmailForm">
+        <input
+          type="email"
+          id="inlineEmailInput"
+          placeholder="seu.email@ufu.br"
+          required
+        />
+        <button type="submit" class="btn btn-primary">Cadastrar Alerta</button>
+      </form>
+    </section>
+
+    <footer class="blueprint-footer">
+      <div>ESTÁGIO.ON // ENGENHARIA QUÍMICA — UBERLÂNDIA, MG • ESPECIFICAÇÃO BLUEPRINT DARK REV 2026</div>
+      <div class="mono">DADOS VERIFICADOS AO ABRIR • CLIQUE EM QUALQUER VAGA PARA EXPANDIR FICHA COMPLETA</div>
+    </footer>
+  </div>
+
+  <!-- MODAL / PAINEL DE CADASTRO DE E-MAIL E HISTÓRICO DE NOTIFICAÇÕES -->
+  <div class="modal-backdrop hidden" id="emailModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="emailModalTitle">
+    <div class="blueprint-modal">
+      <div class="modal-header">
+        <div>
+          <div class="doc-code">MÓDULO DE NOTIFICAÇÃO // ALERTA AUTOMÁTICO DE NOVAS VAGAS</div>
+          <h2 id="emailModalTitle">Cadastro de E-mail &amp; Central de Disparos</h2>
+        </div>
+        <button type="button" class="btn-icon-close" id="btnCloseEmailModal" aria-label="Fechar janela">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-columns">
+          <!-- Coluna Esquerda: Formulário de inscrição -->
+          <form id="modalEmailForm" class="blueprint-form">
+            <div class="section-caption">01 // CONFIGURAR SEU ALERTA</div>
+
+            <label class="field-label" for="subNameInput">Seu Nome (opcional)</label>
+            <input type="text" id="subNameInput" placeholder="Ex: Gabriel — Eng. Química UFU" />
+
+            <label class="field-label" for="subEmailInput">Endereço de E-mail *</label>
+            <input type="email" id="subEmailInput" placeholder="gabriel@exemplo.com.br" required />
+
+            <label class="field-label" for="subMinSalaryInput">Bolsa-Auxílio Mínima Desejada</label>
+            <select id="subMinSalaryInput">
+              <option value="0">Qualquer faixa salarial (Todas as vagas)</option>
+              <option value="1800">A partir de R$ 1.800,00</option>
+              <option value="2000">A partir de R$ 2.000,00</option>
+              <option value="2200">A partir de R$ 2.200,00</option>
+            </select>
+
+            <details class="smtp-details">
+              <summary>Configuração Avançada de Envio Externo (Resend API / SMTP opcional)</summary>
+              <div class="smtp-fields">
+                <p class="helper-note">
+                  Por padrão, todos os alertas são gerados e arquivados instantaneamente na Caixa de Disparos ao lado. Para receber também na caixa de entrada externa, informe opcionalmente uma chave <code>Resend API</code> ou servidor SMTP TLS:
+                </p>
+                <label class="field-label" for="resendApiKeyInput">Resend API Key (opcional)</label>
+                <input type="password" id="resendApiKeyInput" placeholder="re_xxxxxxxxx" />
+              </div>
+            </details>
+
+            <button type="submit" class="btn btn-primary btn-full">
+              Ativar Notificações Automáticas
+            </button>
+
+            <div class="subscribers-box">
+              <div class="section-caption">E-MAILS MONITORADOS ATIVOS</div>
+              <ul class="subscribers-list" id="subscribersList">
+                <!-- Preenchido via JS -->
+              </ul>
+            </div>
+          </form>
+
+          <!-- Coluna Direita: Caixa de Saída / Histórico auditável de e-mails disparados -->
+          <div class="outbox-column">
+            <div class="section-caption">02 // HISTÓRICO DE E-MAILS DISPARADOS</div>
+            <p class="helper-note">
+              Toda vez que uma nova vaga surge (ou ao usar o botão <strong>"Simular Nova Vaga"</strong>), o sistema dispara automaticamente o alerta para os e-mails cadastrados. Clique em um envio para visualizar o e-mail completo:
+            </p>
+            <div class="email-history-list" id="emailHistoryList">
+              <!-- Preenchido via JS -->
+            </div>
+            <div class="email-preview-pane hidden" id="emailPreviewPane">
+              <div class="preview-pane-bar">
+                <span class="mono" id="previewPaneSubject">Pré-visualização do E-mail</span>
+                <button type="button" class="btn-text" id="btnClosePreviewPane">Fechar prévia</button>
+              </div>
+              <div class="email-preview-frame" id="emailPreviewFrame"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST DE NOTIFICAÇÃO -->
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+  <script src="jobs-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

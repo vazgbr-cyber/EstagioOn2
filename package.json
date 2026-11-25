@@ -1,0 +1,12 @@
+{
+  "name": "estagio-on-eq-uberlandia",
+  "version": "1.0.0",
+  "description": "Radar técnico de vagas de estágio em Engenharia Química em Uberlândia-MG (Blueprint Edition)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
